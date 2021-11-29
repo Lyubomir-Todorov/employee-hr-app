@@ -1,49 +1,38 @@
 <template>
   <div class="box m-5 p-5">
-    <h1 class="title is-2 has-text-weight-bold">Login</h1>
+    <h1 class="title is-2 has-text-weight-bold is-underlined">Login</h1>
     <form v-on:submit.prevent="validate" id="form-login">
 
-      <error-message text="Incorrect username / password!"></error-message>
-      <input-field icon="fa-user" placeholder=temp helper="Fart2!"></input-field>
+      <message v-bind:visible="error.visible" v-bind:text="error.text" type="is-danger"></message>
 
-      <div class="field">
-        <label for="username" class="label">Username / Email-Address</label>
-        <div class="control has-icons-left">
-          <span class="icon is-small is-left">
-            <i class="fas fa-user"></i>
-          </span>
-          <input type="text" name="username" placeholder="username" id="username"
-                 class="input" spellcheck="false"
-                 v-on:input="helperUsernameVisible=false" v-model="username"
-          />
-        </div>
-        <p class="help is-danger" v-show="helperUsernameVisible">Please enter a username or email-address</p>
-      </div>
+      <input-field name="username" label="Username"
+                   placeholder="Username" type="text" icon="fa-user"
+                   v-bind:error="helper.username.visible"
+                   v-bind:helper="helper.username.text"
+                   v-model = "username"
+                   @input="helper.username.visible=false"
+      />
 
-      <div class="field">
-        <label for="password" class="label">Password</label>
-        <div class="control has-icons-left">
-          <span class="icon is-small is-left">
-            <i class="fas fa-key"></i>
-          </span>
-          <input type="password" name="password" placeholder="password" id="password"
-                 class="input" autocomplete="password" v-on:input="helperPasswordVisible=false"
-                 v-model="password"
-          />
-        </div>
-        <p class="help is-danger" v-show="helperPasswordVisible">Please enter a password</p>
-      </div>
+      <input-field name="password" label="Password"
+                   placeholder="Password" type="password" icon="fa-key"
+                   v-bind:error="helper.password.visible"
+                   v-bind:helper="helper.password.text"
+                   v-model="password"
+                   @input="helper.password.visible=false"
+      />
 
       <div class="field is-grouped">
         <div class="control">
-          <button type="submit" class="button is-link" id="submit">Login</button>
+          <button type="submit" class="button is-link has-text-weight-bold" id="submit" v-bind:class="{'is-loading' : loading}">Login</button>
         </div>
         <div class="control">
-          <button class="button is-link is-light" id="forgotPassword">Forgot password</button>
+          <router-link to="/forgot">
+          <button class="button is-link is-light has-text-weight-bold" id="forgotPassword">Forgot password</button>
+          </router-link>
         </div>
       </div>
 
-      <a href="/register">Not a user yet? Create a new account now</a>
+      <router-link to="/register">Not a user yet? Create a new account now</router-link>
     </form>
   </div>
 </template>
@@ -55,34 +44,42 @@ export default {
     return {
         username: '',
         password: '',
-        helperUsernameVisible: false,
-        helperPasswordVisible: false,
-        errorVisible: false,
-        errorMessage: ''
+        loading: false,
+        helper: {
+          username: {
+            visible: false,
+            text: "Username required",
+          },
+          password: {
+            visible: false,
+            text: "Password required",
+          },
+        },
+        error: {
+          visible: false,
+          text: "",
+        }
       };
   },
   methods: {
     validate: function () {
-      this.helperUsernameVisible = !this.username
-      this.helperPasswordVisible = !this.password
+      this.helper.username.visible = !this.username
+      this.helper.password.visible = !this.password
+      this.error.visible = false
 
-      this.errorVisible = false
-
-      if (this.username && this.password) {
+      if (this.username.trim() && this.password.trim()) {
         this.post_login()
       }
     },
     post_login: function () {
-      const form = document.getElementById('form-login')
-      const submit = document.getElementById('submit')
-      submit.classList.add('is-loading')
+      this.loading = true;
 
       const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          username: form.username.value,
-          password: form.password.value
+          username: this.username,
+          password: this.password
         })
       }
 
@@ -90,10 +87,11 @@ export default {
           .then(response => response.json())
           .then(data => {
             if (data.status === 200) {
-              window.location.href = data.redirect
+              this.$router.push(data.redirect)
             } else {
-              this.errorVisible = true
-              this.errorMessage = data.errors
+              this.error.visible = true
+              this.error.text = data.errors
+
               const element = document.getElementById('app')
               element.classList.add('animate__animated', 'animate__shakeX')
 
@@ -101,7 +99,7 @@ export default {
                 element.classList.remove('animate__animated', 'animate__shakeX')
               })
             }
-            submit.classList.remove('is-loading')
+            this.loading = false;
           })
     }
   }

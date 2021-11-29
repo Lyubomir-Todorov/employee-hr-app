@@ -1,5 +1,5 @@
 <template>
-  <div v-show="visible" class="message is-danger">
+  <div v-show="visible" class="message" v-bind:class="type">
     <div class = "message-body has-text-weight-bold">
       {{text}}
     </div>
@@ -8,13 +8,14 @@
 
 <script>
 export default {
-  name: "Error",
+  name: "Message",
   props: {
     visible: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     text: String,
+    type: String,
   },
 }
 </script>

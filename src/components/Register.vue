@@ -1,108 +1,73 @@
 <template>
   <div class="box m-5 p-5">
-    <h1 class="title is-2 has-text-weight-bold">Create an account</h1>
+    <h1 class="title is-2 has-text-weight-bold is-underlined">Create an Account</h1>
     <form v-on:submit.prevent="validate" id="form-register">
 
-      <error-message class="is-danger" id="error" v-bind:visible="errorVisible" v-bind:text="errorMessage"></error-message>
+      <message v-bind:visible="error.visible" v-bind:text="error.text" type="is-danger"></message>
 
-      <div class="field">
-        <label for="username" class="label">Username</label>
-        <div class="control has-icons-left">
-          <span class="icon is-small is-left">
-              <i class="fas fa-user"></i>
-          </span>
-          <input type="text" name="username" id="username" class="input" placeholder="Username"
-                 v-on:input="helperUsernameVisible=false" v-model="username"
-          />
-        </div>
-        <p class="help is-danger" v-show="helperUsernameVisible">{{helperUsername}}</p>
+      <input-field name="username" label="Username"
+                   placeholder="Username" type="text" icon="fa-user"
+                   v-bind:error="helper.username.visible"
+                   v-bind:helper="helper.username.text"
+                   v-model = "username"
+                   @input="helper.username.visible=false"
+      />
+
+      <div class = "field-body mb-3">
+        <input-field name="password" label="Password"
+                     placeholder="Password" type="password" icon="fa-key"
+                     v-bind:error="helper.password.visible"
+                     v-bind:helper="helper.password.text"
+                     v-model = "password"
+                     @input="helper.password.visible=false"
+        />
+
+        <input-field name="passwordConfirm" label="Confirm password"
+                     placeholder="Confirm Password" type="password" icon="fa-key"
+                     v-bind:error="helper.passwordConfirm.visible"
+                     v-bind:helper="helper.passwordConfirm.text"
+                     v-model = "passwordConfirm"
+                     @input="helper.passwordConfirm.visible=false"
+        />
       </div>
 
-      <div class="field-body">
-        <div class="field">
-          <label for="password" class="label">Password</label>
-          <div class="control has-icons-left">
-            <span class="icon is-small is-left">
-                <i class="fas fa-key"></i>
-            </span>
-            <input type="password" name="password" id="password" class="input" placeholder="Password"
-                   v-on:input="helperPasswordVisible=false" v-model="password"
-            />
-          </div>
-          <p class="help is-danger" v-show="helperPasswordVisible">{{helperPassword}}</p>
-        </div>
+      <input-field name="email" label="Email Address"
+                   placeholder="Email Address" type="email" icon="fa-at"
+                   v-bind:error="helper.email.visible"
+                   v-bind:helper="helper.email.text"
+                   v-model = "email"
+                   @input="helper.email.visible=false"
+      />
 
-        <div class="field">
-          <label for="passwordConfirm" class="label">Confirm Password</label>
-          <div class="control has-icons-left">
-            <span class="icon is-small is-left">
-                <i class="fas fa-key"></i>
-            </span>
-            <input type="password" name="password" id="passwordConfirm" class="input" placeholder="Confirm Password"
-                   v-on:input="helperPasswordConfirmVisible=false" v-model="passwordConfirm"
-            />
-          </div>
-          <p class="help is-danger" v-show="helperPasswordConfirmVisible">{{helperPasswordConfirm}}</p>
-        </div>
+      <div class = "field-body mb-3">
+        <input-field name="firstName" label="First Name"
+                     placeholder="First Name" type="text" icon="fa-user"
+                     v-bind:error="helper.firstName.visible"
+                     v-bind:helper="helper.firstName.text"
+                     v-model = "firstName"
+                     @input="helper.firstName.visible=false"
+        />
+
+        <input-field name="lastName" label="Last Name"
+                     placeholder="First Name" type="text" icon="fa-user"
+                     v-bind:error="helper.lastName.visible"
+                     v-bind:helper="helper.lastName.text"
+                     v-model = "lastName"
+                     @input="helper.lastName.visible=false"
+        />
       </div>
 
-      <div class="field mt-3">
-        <label for="email" class="label">Email Address</label>
-        <div class="control has-icons-left">
-          <span class="icon is-small is-left">
-              <i class="fas fa-at"></i>
-          </span>
-          <input type="email" name="email" id="email" class="input" placeholder="Email Address"
-                 v-on:input="helperEmailVisible=false" v-model="email"
-          />
-        </div>
-        <p class="help is-danger" v-show="helperEmailVisible">{{helperEmail}}</p>
-      </div>
-
-      <div class="field-body">
-        <div class="field">
-          <label for="firstName" class="label">First Name</label>
-          <div class="control has-icons-left">
-            <span class="icon is-small is-left">
-                <i class="fas fa-user"></i>
-            </span>
-            <input type="text" name="firstName" id="firstName" class="input" placeholder="First Name"
-                   v-on:input="helperFirstNameVisible=false" v-model="firstName"
-            />
-          </div>
-          <p class="help is-danger" v-show="helperFirstNameVisible">{{helperFirstName}}</p>
-        </div>
-
-        <div class="field">
-          <label for="lastName" class="label">Last Name</label>
-          <div class="control has-icons-left">
-            <span class="icon is-small is-left">
-                <i class="fas fa-user"></i>
-            </span>
-            <input type="text" name="lastName" id="lastName" class="input" placeholder="Last Name"
-                   v-on:input="helperLastNameVisible=false" v-model="lastName"
-            />
-          </div>
-          <p class="help is-danger" v-show="helperLastNameVisible">{{helperLastName}}</p>
-        </div>
-      </div>
-
-      <div class="field mt-3">
-        <label for="phone" class="label">Phone Number</label>
-        <div class="control has-icons-left">
-          <span class="icon is-small is-left">
-              <i class="fas fa-phone-alt"></i>
-          </span>
-          <input type="tel" name="phone" id="phone" class="input" placeholder="Phone Number"
-                 v-on:input="helperPhoneVisible=false" v-model="phone"
-          />
-        </div>
-        <p class="help is-danger" v-show="helperPhoneVisible">{{helperPhone}}</p>
-      </div>
+      <input-field name="phone" label="Phone Number"
+                   placeholder="1234567890" type="tel" icon="fa-phone-alt"
+                   v-bind:error="helper.phone.visible"
+                   v-bind:helper="helper.phone.text"
+                   v-model = "phone"
+                   @input="helper.phone.visible=false"
+      />
 
       <div class="field mt-5">
         <div class="control">
-          <button type="submit" class="button is-link" id="submit">Create Account</button>
+          <button type="submit" class="button is-link" id="submit" v-bind:class="{'is-loading' : loading}">Create Account</button>
         </div>
       </div>
 
@@ -115,6 +80,7 @@ export default {
   name: 'Register',
   data: function() {
     return {
+      loading: false,
       username: '',
       password: '',
       passwordConfirm: '',
@@ -123,105 +89,79 @@ export default {
       lastName: '',
       phone: '',
 
-      helperUsernameVisible: false,
-      helperPasswordVisible: false,
-      helperPasswordConfirmVisible: false,
-      helperEmailVisible: false,
-      helperPhoneVisible: false,
-      helperFirstNameVisible: false,
-      helperLastNameVisible: false,
-
-      helperUsername: '',
-      helperPassword: '',
-      helperPasswordConfirm: '',
-      helperEmail: '',
-      helperPhone: '',
-      helperFirstName: '',
-      helperLastName: '',
-
-      errorVisible: false,
-      errorMessage: ''
+      helper: {
+        username: {visible: false, text: ""},
+        password: {visible: false, text: ""},
+        passwordConfirm: {visible: false, text: ""},
+        email: {visible: false, text: ""},
+        phone: {visible: false, text: ""},
+        firstName: {visible: false, text: ""},
+        lastName: {visible: false, text: ""}
+      },
+      error: {visible: false, text: ""}
     };
   },
 
   methods: {
     validate: function () {
-      let valid = true
       const passwordValidation = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
       const emailValidation = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       const phoneValidation = /[0-9]{10}/
 
-      if (!this.username) {
-        this.helperUsernameVisible = true
-        this.helperUsername = 'Username must be provided'
-        valid = false
-      } else if (this.username.length < 6) {
-        this.helperUsernameVisible = true
-        this.helperUsername = 'Username must be longer than 6 characters'
-        valid = false
-      }
+      this.username.trim();
+      this.password.trim();
+      this.passwordConfirm.trim();
+      this.email.trim();
+      this.firstName.trim();
+      this.lastName.trim();
+      this.phone.trim();
 
-      if (!this.password) {
-        this.helperPasswordVisible = true
-        this.helperPassword = 'Password must be provided'
-        valid = false
-      }
+      //Validate username, must be provided, and more than 6 characters
+      this.helper.username.visible = !this.username || (this.username.length < 6);
+      if (!this.username) this.helper.username.text = 'Username must be provided';
+      else if (this.username.length < 6) this.helper.username.text = 'Username must be longer than 6 characters';
 
-      if (!this.passwordConfirm) {
-        this.helperPasswordConfirmVisible = true
-        this.helperPasswordConfirm = 'Password must be provided'
-        valid = false
-      }
+      //Validate password, must be provided, and match requirements
+      this.helper.password.visible = !this.password || (this.password && !passwordValidation.test(this.password));
+      if (!this.password) this.helper.password.text = 'Password must be provided';
+      else if (this.password && !passwordValidation.test(this.password)) this.helper.password.text = 'Password must have an uppercase, lowercase, number, special symbol, and be at least 8 characters long'
 
-      if (this.password && this.passwordConfirm && (this.password !== this.passwordConfirm)) {
-        this.helperPasswordConfirmVisible = true
-        this.helperPasswordConfirm = 'Passwords must match'
-        valid = false
-      }
-      if (this.password && !passwordValidation.test(this.password)) {
-        this.helperPasswordVisible = true
-        this.helperPassword = 'Passwords must have an uppercase, digit, special symbol, and be at least 8 characters long'
-        valid = false
-      }
+      //Validate confirmation password, must be provided, and match other password
+      this.helper.passwordConfirm.visible = (!this.passwordConfirm) || (this.password && this.passwordConfirm && (this.password !== this.passwordConfirm));
+      if (!this.passwordConfirm) this.helper.passwordConfirm.text = 'Password must be provided';
+      if (this.password && this.passwordConfirm && (this.password !== this.passwordConfirm)) this.helper.passwordConfirm.text  = 'Passwords must match';
 
-      if (!this.email) {
-        this.helperEmailVisible = true
-        this.helperEmail = 'Email address must be provided'
-        valid = false
-      } else if (!emailValidation.test(this.email)) {
-        this.helperEmailVisible = true
-        this.helperEmail = 'Invalid email address'
-        valid = false
-      }
+      //Validate email, must be provided, must match pattern
+      this.helper.email.visible = !this.email || (!emailValidation.test(this.email));
+      if (!this.email) this.helper.email.text = 'Email address must be provided';
+      else if (!emailValidation.test(this.email)) this.helper.email.text = 'Invalid email address';
 
-      if (!this.firstName) {
-        this.helperFirstNameVisible = true
-        this.helperFirstName = 'First name must be provided'
-        valid = false
-      }
-      if (!this.lastName) {
-        this.helperLastNameVisible = true
-        this.helperLastName = 'Last name must be provided'
-        valid = false
-      }
-      if (!this.phone) {
-        this.helperPhoneVisible = true
-        this.helperPhone = 'Phone number must be provided'
-        valid = false
-      } else if (!phoneValidation.test(this.phone)) {
-        this.helperPhoneVisible = true
-        this.helperPhone = 'Invalid phone number'
-        valid = false
-      }
+      //Validate first name, must be provided
+      this.helper.firstName.visible = !this.firstName;
+      if (!this.firstName) this.helper.firstName.text = 'First name must be provided';
 
-      if (valid) {
-        this.post_register()
-      }
+      //Validate last name, must be provided
+      this.helper.lastName.visible = !this.lastName;
+      if (!this.lastName) this.helper.lastName.text = 'First name must be provided';
+
+      //Validate phone number, must be provided, must match pattern
+      this.helper.phone.visible = !this.phone || (!phoneValidation.test(this.phone));
+      if (!this.phone) this.helper.phone.text = 'Phone number must be provided';
+      else if (!phoneValidation.test(this.phone)) this.helper.phone.text = 'Invalid phone number';
+
+      // eslint-disable-next-line no-unused-vars
+      const valid = !this.helper.username.visible &&
+          !this.helper.password.visible &&
+          !this.helper.passwordConfirm.visible &&
+          !this.helper.email.visible &&
+          !this.helper.firstName.visible &&
+          !this.helper.lastName.visible &&
+          !this.helper.phone.visible;
+
+      if (valid) this.post_register();
     },
     post_register: function () {
-      //const form = document.getElementById('form-register')
-      const submit = document.getElementById('submit')
-      submit.classList.add('is-loading')
+      this.loading = true;
 
       const requestOptions = {
         method: 'POST',
@@ -244,36 +184,13 @@ export default {
               window.location.href = data.redirect
             } else {
               const err = data['errors']['errors']
+
               for (let i = 0; i < (err.length); i++) {
-                switch (err[i]['param']) {
-                  case ('username'):
-                    this.helperUsernameVisible = true
-                    this.helperUsername = err[i]['msg']
-                    break
-                  case ('password'):
-                    this.helperPasswordVisible = true
-                    this.helperPassword = err[i]['msg']
-                    break
-                  case ('email'):
-                    this.helperEmailVisible = true
-                    this.helperEmail = err[i]['msg']
-                    break
-                  case ('firstName'):
-                    this.helperFirstNameVisible = true
-                    this.helperFirstName = err[i]['msg']
-                    break
-                  case ('lastName'):
-                    this.helperLastNameVisible = true
-                    this.helperLastName = err[i]['msg']
-                    break
-                  case ('phone'):
-                    this.helperPhoneVisible = true
-                    this.helperPhone = err[i]['msg']
-                    break
-                }
+                this.helper[err[i]['param']].visible = true;
+                this.helper[err[i]['param']].text = err[i]['msg'];
               }
             }
-            submit.classList.remove('is-loading')
+            this.loading = false;
           })
     }
   }
