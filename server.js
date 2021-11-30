@@ -1,5 +1,6 @@
 const express = require('express');
 const session = require('express-session');
+const MySQLStore = require('express-mysql-session')(session);
 const { body, validationResult } = require('express-validator');
 const bodyParser = require('body-parser');
 const path = require("path");
@@ -7,7 +8,6 @@ const mysql = require("mysql");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const cookieParser = require("cookie-parser");
-const MySQLStore = require('express-mysql-session')(session);
 const { customAlphabet } = require('nanoid/async');
 
 const server = express();
@@ -33,15 +33,15 @@ connection.connect(function(err) {
     console.log("Connected");
 });
 
-const options = {
+const sessionStore = new MySQLStore({
     host: "localhost",
     user: "root",
     password: "",
     port: 3306,
     database: 'testdb',
     createDatabaseTable: true,
-};
-const sessionStore = new MySQLStore(options, connection);
+    connectionLimit: 8,
+}, connection);
 
 server.use(bodyParser.json());
 server.use(cookieParser());
@@ -62,15 +62,15 @@ server.use(session({
 
 const saltRounds = 10;
 
-async function main(email, name) {
+async function sendEmail(email, name) {
     // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
         host: "smtp.hostinger.com",
         port: 465,
         secure: true,
         auth: {
-            user: "leo@lyubomirtodorov.ca",
-            pass: "AvFrn9BtA97j7C",
+            user: process.env.EMAIL_USERNAME,
+            pass: process.env.EMAIL_PASSWORD,
         },
     });
 
@@ -81,7 +81,7 @@ async function main(email, name) {
         "<i>If you didn't request a new password, you can safely delete this email.</i>";
 
     await transporter.sendMail({
-        from: '"Backend Demo" <leo@lyubomirtodorov.ca>', // sender address
+        from: `"Backend Demo" <${process.env.EMAIL_USERNAME}>`, // sender address
         to: email, // list of receivers
         subject: "Password Reset", // Subject line
         text: "Reset your password", // plain text body
@@ -122,7 +122,6 @@ server.get('/account', function(req, res) {
                             if (result.length > 0) {
                                 register.forEach(function(item, index) {
                                     registeredCourses[index] = result[item.course_id];
-                                    console.log(registeredCourses)
                                 });
 
                                 return res.json({
@@ -132,6 +131,12 @@ server.get('/account', function(req, res) {
                                 });
                             }
                         })
+                    } else {
+                        return res.json({
+                            status: 200,
+                            msg: accountDetails,
+                            courses: ""
+                        });
                     }
                 });
             } else {
@@ -203,7 +208,7 @@ server.post("/login",
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-        res.json({
+        return res.json({
             status: 400,
             errors: errors
         });
@@ -266,7 +271,7 @@ server.post("/register",
         .isLength({min: 8})
         .withMessage("Passwords must have an uppercase, lowercase, number, special symbol, and be at least 8 characters long").bail()
         // eslint-disable-next-line no-unused-vars
-        .custom( (value,{req, loc, path}) => {
+        .custom( (value,{req}) => {
             return (value === req.body.passwordConfirm);
         }).withMessage("Passwords must match"),
 
@@ -321,7 +326,7 @@ server.post("/register",
                         mysql.escape(phone) + ", 0);"
 
                     // eslint-disable-next-line no-unused-vars
-                    connection.query(query, function (err, result){
+                    connection.query(query, function (err){
                         if (err) throw err;
                         return res.json({
                             status: 200,
@@ -358,13 +363,18 @@ server.post("/reset",
 
         if (result.length > 0) {
             // send mail with defined transport object
-            main(result[0]["email_address"], result[0]["first_name"]);
+            sendEmail(result[0]["email_address"], result[0]["first_name"]).then(function () {
+                return res.json({
+                    status: 200,
+                    msg: "If a matching account was found, an email was sent to " + email + " to reset your password."
+                });
+            }, err => {
+                return res.json({
+                    status: 500,
+                    msg: err
+                });
+            });
         }
-
-        return res.json({
-            status: 200,
-            msg: "If a matching account was found, an email was sent to " + email + " to allow you to reset your password."
-        });
     });
 });
 
@@ -378,7 +388,7 @@ server.post("/course-register", body("course_id").trim().escape().notEmpty().isN
                     ", " + mysql.escape(req.body.course_id) + ");";
 
                 // eslint-disable-next-line no-unused-vars
-                connection.query(query, function (err, result) {
+                connection.query(query, function (err) {
                     if (err) throw err;
                     return res.json({
                         status: 200,
@@ -400,7 +410,7 @@ server.post("/course-withdraw", body("course_id").trim().escape().notEmpty().isN
             const query = "DELETE FROM registered_courses WHERE user_id = " + mysql.escape(req.session.user_id) +
                 " AND course_id = " + mysql.escape(req.body.course_id) + ";";
             // eslint-disable-next-line no-unused-vars
-            connection.query(query, function (err, result) {
+            connection.query(query, function (err) {
                 if (err) throw err;
                 return res.json({
                     status: 200,
@@ -416,9 +426,17 @@ server.post("/course-withdraw", body("course_id").trim().escape().notEmpty().isN
 
 //Handle post for logout
 server.post("/logout", (req, res) =>{
-    req.session.destroy();
-    sessionStore.close();
-    res.redirect('/');
+    if (req.session) {
+        req.session.destroy(err => {
+           if (err) {
+               res.status(400).send("Unable to log out")
+           } else {
+               res.status(200).send("Logout successful")
+           }
+        });
+    } else {
+        res.end();
+    }
 });
 
 

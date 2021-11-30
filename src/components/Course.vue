@@ -1,8 +1,8 @@
 <template>
   <div class = "block">
     <article class = "message" v-bind:class="{'is-success' : isRegistered}">
-      <div class = "message-header">{{courseCode}} : {{title}}
-        <span class="icon is-small is-clickable" @click="expand = !expand" >
+      <div class = "message-header is-clickable" @click="expand = !expand">{{courseCode}} : {{title}}
+        <span class="icon is-small">
           <i class="fas fa-angle-down"></i>
         </span>
       </div>

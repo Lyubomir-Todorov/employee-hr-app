@@ -1,77 +1,87 @@
 <template>
-  <div class="box m-5 p-5">
-    <h1 class="title is-2 has-text-weight-bold is-underlined">Create an Account</h1>
-    <form v-on:submit.prevent="validate" id="form-register">
+  <div class = "container">
+    <div class="box m-5 p-5">
 
-      <message v-bind:visible="error.visible" v-bind:text="error.text" type="is-danger"></message>
+      <nav class="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+          <li><router-link to="/login">Login</router-link></li>
+          <li class="is-active"><router-link to="#" aria-current="page">Register</router-link></li>
+        </ul>
+      </nav>
 
-      <input-field name="username" label="Username"
-                   placeholder="Username" type="text" icon="fa-user"
-                   v-bind:error="helper.username.visible"
-                   v-bind:helper="helper.username.text"
-                   v-model = "username"
-                   @input="helper.username.visible=false"
-      />
+      <h1 class="title is-2 has-text-weight-bold is-underlined">Create an Account</h1>
+      <form @submit.prevent="validate" id="form-register">
 
-      <div class = "field-body mb-3">
-        <input-field name="password" label="Password"
-                     placeholder="Password" type="password" icon="fa-key"
-                     v-bind:error="helper.password.visible"
-                     v-bind:helper="helper.password.text"
-                     v-model = "password"
-                     @input="helper.password.visible=false"
+        <message v-bind:visible="error.visible" v-bind:text="error.text" type="is-danger"></message>
+
+        <input-field name="username" label="Username"
+                     placeholder="Username" type="text" icon="fa-user"
+                     v-bind:error="helper.username.visible"
+                     v-bind:helper="helper.username.text"
+                     v-model = "username"
+                     @input="helper.username.visible=false"
         />
 
-        <input-field name="passwordConfirm" label="Confirm password"
-                     placeholder="Confirm Password" type="password" icon="fa-key"
-                     v-bind:error="helper.passwordConfirm.visible"
-                     v-bind:helper="helper.passwordConfirm.text"
-                     v-model = "passwordConfirm"
-                     @input="helper.passwordConfirm.visible=false"
-        />
-      </div>
+        <div class = "field-body mb-3">
+          <input-field name="password" label="Password"
+                       placeholder="Password" type="password" icon="fa-key"
+                       v-bind:error="helper.password.visible"
+                       v-bind:helper="helper.password.text"
+                       v-model = "password"
+                       @input="helper.password.visible=false"
+          />
 
-      <input-field name="email" label="Email Address"
-                   placeholder="Email Address" type="email" icon="fa-at"
-                   v-bind:error="helper.email.visible"
-                   v-bind:helper="helper.email.text"
-                   v-model = "email"
-                   @input="helper.email.visible=false"
-      />
-
-      <div class = "field-body mb-3">
-        <input-field name="firstName" label="First Name"
-                     placeholder="First Name" type="text" icon="fa-user"
-                     v-bind:error="helper.firstName.visible"
-                     v-bind:helper="helper.firstName.text"
-                     v-model = "firstName"
-                     @input="helper.firstName.visible=false"
-        />
-
-        <input-field name="lastName" label="Last Name"
-                     placeholder="First Name" type="text" icon="fa-user"
-                     v-bind:error="helper.lastName.visible"
-                     v-bind:helper="helper.lastName.text"
-                     v-model = "lastName"
-                     @input="helper.lastName.visible=false"
-        />
-      </div>
-
-      <input-field name="phone" label="Phone Number"
-                   placeholder="1234567890" type="tel" icon="fa-phone-alt"
-                   v-bind:error="helper.phone.visible"
-                   v-bind:helper="helper.phone.text"
-                   v-model = "phone"
-                   @input="helper.phone.visible=false"
-      />
-
-      <div class="field mt-5">
-        <div class="control">
-          <button type="submit" class="button is-link" id="submit" v-bind:class="{'is-loading' : loading}">Create Account</button>
+          <input-field name="passwordConfirm" label="Confirm password"
+                       placeholder="Confirm Password" type="password" icon="fa-key"
+                       v-bind:error="helper.passwordConfirm.visible"
+                       v-bind:helper="helper.passwordConfirm.text"
+                       v-model = "passwordConfirm"
+                       @input="helper.passwordConfirm.visible=false"
+          />
         </div>
-      </div>
 
-    </form>
+        <input-field name="email" label="Email Address"
+                     placeholder="Email Address" type="email" icon="fa-at"
+                     v-bind:error="helper.email.visible"
+                     v-bind:helper="helper.email.text"
+                     v-model = "email"
+                     @input="helper.email.visible=false"
+        />
+
+        <div class = "field-body mb-3">
+          <input-field name="firstName" label="First Name"
+                       placeholder="First Name" type="text" icon="fa-user"
+                       v-bind:error="helper.firstName.visible"
+                       v-bind:helper="helper.firstName.text"
+                       v-model = "firstName"
+                       @input="helper.firstName.visible=false"
+          />
+
+          <input-field name="lastName" label="Last Name"
+                       placeholder="First Name" type="text" icon="fa-user"
+                       v-bind:error="helper.lastName.visible"
+                       v-bind:helper="helper.lastName.text"
+                       v-model = "lastName"
+                       @input="helper.lastName.visible=false"
+          />
+        </div>
+
+        <input-field name="phone" label="Phone Number"
+                     placeholder="1234567890" type="tel" icon="fa-phone-alt"
+                     v-bind:error="helper.phone.visible"
+                     v-bind:helper="helper.phone.text"
+                     v-model = "phone"
+                     @input="helper.phone.visible=false"
+        />
+
+        <div class="field mt-5">
+          <div class="control">
+            <button type="submit" class="button is-link" id="submit" v-bind:class="{'is-loading' : loading}">Create Account</button>
+          </div>
+        </div>
+
+      </form>
+    </div>
   </div>
 </template>
 
@@ -181,7 +191,7 @@ export default {
           .then(response => response.json())
           .then(data => {
             if (data.status === 200) {
-              window.location.href = data.redirect
+              this.$router.push({ path: data.redirect, query: { registration: 'true' } });
             } else {
               const err = data['errors']['errors']
 

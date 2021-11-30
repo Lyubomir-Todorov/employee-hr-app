@@ -1,27 +1,29 @@
 <template>
-  <div v-show="!loading" class="box m-5 p-5">
-    <div>
-      <div v-if="authorized">
+  <div class = "container">
+    <div v-show="!loading" class="box m-5 p-5">
+      <div>
+        <div v-if="authorized">
 
-        <nav class="breadcrumb" aria-label="breadcrumbs">
-          <ul>
-            <li><router-link to="/account">My Account</router-link></li>
-            <li class="is-active"><router-link to="#" aria-current="page">Training courses</router-link></li>
-          </ul>
-        </nav>
+          <nav class="breadcrumb" aria-label="breadcrumbs">
+            <ul>
+              <li><router-link to="/account">My Account</router-link></li>
+              <li class="is-active"><router-link to="#" aria-current="page">Training courses</router-link></li>
+            </ul>
+          </nav>
 
-        <h1 class="title is-2 has-text-weight-bold is-underlined">Training</h1>
+          <h1 class="title is-2 has-text-weight-bold is-underlined">Training</h1>
 
-        <course class = "mb-2" v-for="item in courses" :key="item.id"
-                v-bind:courseId="item.id"
-                v-bind:course-code="item.course_code"
-                v-bind:title="item.course_title"
-                v-bind:description="item.description"
-                v-bind:startDate="item.start_date"
-                v-bind:endDate="item.end_date"
-                v-bind:registered="item.registered"
-        />
+          <course class = "mb-2" v-for="item in courses" :key="item.id"
+                  v-bind:courseId="item.id"
+                  v-bind:course-code="item.course_code"
+                  v-bind:title="item.course_title"
+                  v-bind:description="item.description"
+                  v-bind:startDate="item.start_date"
+                  v-bind:endDate="item.end_date"
+                  v-bind:registered="item.registered"
+          />
 
+        </div>
       </div>
     </div>
   </div>

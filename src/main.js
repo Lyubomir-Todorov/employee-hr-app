@@ -7,12 +7,12 @@ import Register from "@/components/Register";
 import Account from "@/components/Account";
 import Unauthorized from "@/components/Unauthorized";
 import Forgot from "@/components/Forgot-Password";
+import NotFound from "@/components/NotFound";
 
 import Message from "@/components/Message";
 import Input from "@/components/Input";
 import Training from "@/components/Training";
 import Course from "@/components/Course";
-import NotFound from "@/components/NotFound";
 
 Vue.component("message", Message);
 Vue.component("input-field", Input);
@@ -37,6 +37,6 @@ const router = new VueRouter({
 })
 
 // eslint-disable-next-line no-unused-vars
-const app = new Vue({
+new Vue({
   router
 }).$mount('#app')
