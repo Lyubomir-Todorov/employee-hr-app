@@ -1,24 +1,29 @@
-# backend-demo
+# employee-hr-app
 
-## Project setup
-```
-npm install
-```
+## About
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+- A full stack app meant to represent a companies Human Resources page.
+- Front end developed using Vue.js, and Firebase + Node.js for backend.
 
-### Compiles and minifies for production
-```
-npm run build
-```
+Employees can view and edit their personal info, along with registering for training courses.
 
-### Lints and fixes files
-```
-npm run lint
-```
+Administrators can manage training courses, along with adding new users.
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Demo
+
+A demonstration of the app can be found [here](https://www.example.com).
+
+Please note, all write and update permissions are disabled to preserve the demo's state.
+
+###Accounts
+
+There are several accounts that can be tested with the demo:
+
+| Email Address | Password | Account Status |
+| ----------- | ----------- | ------------  |
+| admin@admin.com |  password | Active |
+| lmarvelley4@github.com |  lmarvelley_514 | Active |
+| jkubal2@omniture.com | headwear-useable-fragility | Active |
+| green1@homestead.com | green_490 | Active |
+| igurg3@hugedomains.com | gcauser_647 | Active |
+| hfound0@lycos.com | hschulken_987 | Disabled |

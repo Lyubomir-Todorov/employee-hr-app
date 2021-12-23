@@ -6,16 +6,22 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "scss-watch": "node-sass --watch scss -o css",
+    "scss-build": "node-sass scss -o css"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
+    "bulma": "^0.9.3",
     "bulma-toast": "^2.4.1",
     "core-js": "^3.6.5",
     "express": "^4.17.1",
     "express-mysql-session": "^2.1.7",
+    "firebase": "^9.5.0",
     "mysql": "^2.18.1",
     "nanoid": "^3.1.30",
+    "node-sass": "^7.0.0",
+    "sass": "^1.44.0",
     "vue": "^2.6.11",
     "vue-server-renderer": "^2.6.14"
   },
@@ -30,9 +36,12 @@
     "eslint-plugin-vue": "^6.2.2",
     "express-session": "^1.17.2",
     "express-validator": "^6.13.0",
+    "firebase-admin": "^10.0.0",
     "nodemailer": "^6.7.2",
     "vue-router": "^3.5.3",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.6.11",
+    "bulma": "^0.9.3",
+    "node-sass": "^7.0.0"
   },
   "eslintConfig": {
     "root": true,

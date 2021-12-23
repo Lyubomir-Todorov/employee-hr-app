@@ -1,0 +1,39 @@
+@charset "utf-8";
+
+$black: #141415;
+$white: #DCE0D9;
+$cyan: #494850;
+$yellow: #EC9A29;
+$primary: #60AB9A;
+
+$success: #87CBAC;
+$success-light: #307356;
+$success-dark: $white;
+
+
+// Update some of Bulma's component variables
+$scheme-main: $black;
+
+$text: $white;
+$text-strong: $white;
+
+$message-header-color: $yellow;
+
+$scheme-invert: $white;
+
+$info: #6C6B76;
+$info-dark: $white;
+$info-light: $cyan;
+
+$danger: #CA2E55;
+$danger-light: #960200;
+$danger-dark: $white;
+
+$input-color: $white;
+
+::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
+// Import Bulma
+@import "../../node_modules/bulma/bulma";

@@ -1,14 +1,14 @@
-const express = require('express');
-const session = require('express-session');
-const MySQLStore = require('express-mysql-session')(session);
-const { body, validationResult } = require('express-validator');
+const express = require("express");
+const session = require("express-session");
+const MySQLStore = require("express-mysql-session")(session);
+const { body, validationResult } = require("express-validator");
 const bodyParser = require('body-parser');
 const path = require("path");
 const mysql = require("mysql");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const cookieParser = require("cookie-parser");
-const { customAlphabet } = require('nanoid/async');
+const { customAlphabet } = require("nanoid/async");
 
 const server = express();
 const port = process.env.PORT || 3000;
@@ -50,7 +50,7 @@ server.use(express.static(path.join(__dirname, 'src')))
 
 const oneDay = 1000 * 60 * 60 * 24;
 server.use(session({
-    secret: 'TUY8PCnx6R%ZMv2eXLzxaEK6FiKFVugzBMxYwSXfjKhkoufpVfPX9UJ&CsqQa7j6',
+    secret: process.env.COOKIE_SECRET,
     cookie: { maxAge: oneDay },
     store: sessionStore,
     resave: false,
@@ -65,9 +65,9 @@ const saltRounds = 10;
 async function sendEmail(email, name) {
     // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
-        host: "smtp.hostinger.com",
-        port: 465,
-        secure: true,
+        host: process.env.EMAIL_HOST,
+        port: process.env.EMAIL_PORT,
+        secure: process.env.EMAIL_SECURE,
         auth: {
             user: process.env.EMAIL_USERNAME,
             pass: process.env.EMAIL_PASSWORD,

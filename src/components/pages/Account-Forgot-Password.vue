@@ -2,6 +2,8 @@
   <div class = "container">
     <div class="box m-5 p-5">
 
+      <back/>
+
       <nav class="breadcrumb" aria-label="breadcrumbs">
         <ul>
           <li><router-link to="/login">Login</router-link></li>
@@ -10,7 +12,6 @@
       </nav>
 
       <h1 class="title is-2 has-text-weight-bold is-underlined">Reset your Password</h1>
-      <message text="Note: The email will not contain any way to actually reset the password. This is just a proof of concept to test mailing" type="is-info"></message>
       <form v-on:submit.prevent="validate" id="form-reset">
 
         <message v-bind:visible="error.visible" v-bind:text="error.text" type="is-danger"></message>
@@ -27,7 +28,7 @@
 
         <div class="field is-grouped">
           <div class="control">
-            <button type="submit" class="button is-link has-text-weight-bold" id="submit" v-bind:class="{'is-loading' : loading}">Reset</button>
+            <btn text="Reset Password" type="is-success" icon="fa-sync-alt" :is-loading="loading"/>
           </div>
         </div>
 
@@ -61,45 +62,13 @@ export default {
   },
   methods: {
     validate: function () {
-      this.helper.email.visible = !this.email
-      this.error.visible = false
+      this.helper.email.visible = !this.email;
+      this.error.visible = false;
 
       if (this.email.trim()) {
-        this.post_reset()
+        this.resetPassword(this.email);
       }
     },
-    post_reset: function () {
-      this.loading = true;
-
-      const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: this.email
-        })
-      }
-
-      fetch('/reset', requestOptions)
-          .then(response => response.json())
-          .then(data => {
-            if (data.status === 200) {
-              this.success.visible = true;
-              this.success.text = data.msg;
-            } else {
-              this.error.visible = true;
-              console.log(data);
-              this.error.text = data.errors.errors[0].msg;
-
-              const element = document.getElementById('app');
-              element.classList.add('animate__animated', 'animate__shakeX');
-
-              element.addEventListener('animationend', () => {
-                element.classList.remove('animate__animated', 'animate__shakeX');
-              })
-            }
-            this.loading = false;
-          })
-    }
   }
 }
 </script>

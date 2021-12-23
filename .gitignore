@@ -21,3 +21,4 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+/vuejs-backend-demo-firebase-adminsdk-3jdr4-ce079c976a.json

@@ -25,16 +25,14 @@
 
           <div class="field is-grouped">
             <div class="control">
-              <button type="submit" class="button is-link has-text-weight-bold" id="submit" v-bind:class="{'is-loading' : loading}">Login</button>
+              <btn text="Login" type="is-success" icon="fa-sign-in-alt" :is-loading="loading"/>
             </div>
             <div class="control">
               <router-link to="/forgot">
-                <button class="button is-link is-light has-text-weight-bold" id="forgotPassword">Forgot password</button>
+                <btn text="Forgot Password" type="is-link" icon="fa-question-circle"/>
               </router-link>
             </div>
           </div>
-
-          <router-link to="/register">Not a user yet? Create a new account now</router-link>
         </form>
       </div>
     </div>
@@ -44,6 +42,20 @@
 <script>
 
 const bulmaToast = require("bulma-toast");
+import { initializeApp } from 'firebase/app';
+import {getAuth, onAuthStateChanged, signInWithEmailAndPassword} from "firebase/auth";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBDv7e6FNIdthlx0bCmz5v2zeRCXnaG1J0",
+  authDomain: "vuejs-backend-demo.firebaseapp.com",
+  projectId: "vuejs-backend-demo",
+  storageBucket: "vuejs-backend-demo.appspot.com",
+  messagingSenderId: "1094637691283",
+  appId: "1:1094637691283:web:99df984eb7ffe91a1e4866"
+};
+
+initializeApp(firebaseConfig);
+const auth = getAuth();
 
 export default {
   name: 'Login',
@@ -66,22 +78,46 @@ export default {
           visible: false,
           text: "",
         },
-        toast: {
-          type: "",
-          text: ""
-        }
       };
   },
   created() {
-    if (this.$route.query.registration) this.displayToast("Account successfully registered!")
-    if (this.$route.query.logout) this.displayToast("You have been successfully logged out")
+    if (this.$route.query.logout) this.displayToast("You have been successfully logged out");
+    this.is_logged_in_already()
   },
   methods: {
     displayToast: function (text) {
       bulmaToast.toast({ message: `<p class = "has-text-weight-bold">${text}</p>`,
         type: 'is-success',
         dismissible: true, position: "bottom-center",
-        duration: 3000, animate: { in: 'fadeIn', out: 'fadeOut' },})
+        duration: 3000, animate: { in: 'fadeIn', out: 'fadeOut' }})
+    },
+    async is_logged_in_already() {
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          this.$router.push("/account").catch(()=>{});
+        }
+      });
+    },
+    async login () {
+      const auth = getAuth();
+      this.loading = true;
+      signInWithEmailAndPassword(auth, this.username, this.password)
+          .then(() => {
+            this.$router.push("/account").catch(()=>{})
+          })
+          .catch((error) => {
+            this.error.visible = true;
+            this.error.text = error.message;
+
+            const element = document.getElementById('app')
+            element.classList.add('animate__animated', 'animate__shakeX')
+
+            element.addEventListener('animationend', () => {
+              element.classList.remove('animate__animated', 'animate__shakeX')
+            })
+
+            this.loading = false;
+          });
     },
 
     validate: function () {
@@ -90,40 +126,9 @@ export default {
       this.error.visible = false
 
       if (this.username.trim() && this.password.trim()) {
-        this.post_login()
+        this.login();
       }
     },
-    post_login: function () {
-      this.loading = true;
-
-      const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          username: this.username,
-          password: this.password
-        })
-      }
-
-      fetch('/login', requestOptions)
-          .then(response => response.json())
-          .then(data => {
-            if (data.status === 200) {
-              this.$router.push(data.redirect)
-            } else {
-              this.error.visible = true
-              this.error.text = data.errors
-
-              const element = document.getElementById('app')
-              element.classList.add('animate__animated', 'animate__shakeX')
-
-              element.addEventListener('animationend', () => {
-                element.classList.remove('animate__animated', 'animate__shakeX')
-              })
-            }
-            this.loading = false;
-          })
-    }
   }
 }
 </script>
