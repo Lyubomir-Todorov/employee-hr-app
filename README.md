@@ -11,7 +11,7 @@ Administrators can manage training courses, along with adding new users.
 
 ## Demo
 
-A demonstration of the app can be found [here](https://www.example.com).
+A demo of the app can be found [here](https://vuejs-backend-demo.web.app/).
 
 Please note, all write and update permissions are disabled to preserve the demo's state.
 
