@@ -297,7 +297,7 @@ th:not([align]) {
 }
 
 html {
-  background-color: #0fff00;
+  background-color: white;
   font-size: 16px;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
