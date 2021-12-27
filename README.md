@@ -15,7 +15,7 @@ A demonstration of the app can be found [here](https://www.example.com).
 
 Please note, all write and update permissions are disabled to preserve the demo's state.
 
-###Accounts
+## Accounts
 
 There are several accounts that can be tested with the demo:
 
