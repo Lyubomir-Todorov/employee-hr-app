@@ -4,12 +4,13 @@ import { getAuth, onAuthStateChanged, signOut, sendPasswordResetEmail, updatePas
 import { doc, addDoc, deleteDoc, getDoc, getFirestore, getDocs, collection, updateDoc, arrayUnion, arrayRemove, query, where } from "firebase/firestore";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBDv7e6FNIdthlx0bCmz5v2zeRCXnaG1J0",
-    authDomain: "vuejs-backend-demo.firebaseapp.com",
-    projectId: "vuejs-backend-demo",
-    storageBucket: "vuejs-backend-demo.appspot.com",
-    messagingSenderId: "1094637691283",
-    appId: "1:1094637691283:web:99df984eb7ffe91a1e4866"
+  apiKey: "AIzaSyB_RXxUsRfH61lyZOeS6IftBhLRRhAgTow",
+  authDomain: "vuejs-backend-demo.firebaseapp.com",
+  databaseURL: "https://vuejs-backend-demo-default-rtdb.firebaseio.com",
+  projectId: "vuejs-backend-demo",
+  storageBucket: "vuejs-backend-demo.appspot.com",
+  messagingSenderId: "1094637691283",
+  appId: "1:1094637691283:web:99df984eb7ffe91a1e4866"
 };
 
 initializeApp(firebaseConfig);
