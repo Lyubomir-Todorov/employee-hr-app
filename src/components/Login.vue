@@ -46,8 +46,9 @@ import { initializeApp } from 'firebase/app';
 import {getAuth, onAuthStateChanged, signInWithEmailAndPassword} from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBDv7e6FNIdthlx0bCmz5v2zeRCXnaG1J0",
+  apiKey: "AIzaSyB_RXxUsRfH61lyZOeS6IftBhLRRhAgTow",
   authDomain: "vuejs-backend-demo.firebaseapp.com",
+  databaseURL: "https://vuejs-backend-demo-default-rtdb.firebaseio.com",
   projectId: "vuejs-backend-demo",
   storageBucket: "vuejs-backend-demo.appspot.com",
   messagingSenderId: "1094637691283",
