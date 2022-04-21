@@ -4,8 +4,8 @@
   "private": true,
   "proxy": "http://localhost:3000/",
   "scripts": {
-    "serve": "./node_modules/.bin/vue-cli-service serve",
-    "build": "./node_modules/.bin/vue-cli-service build",
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "scss-watch": "node-sass --watch scss -o css",
     "scss-build": "node-sass scss -o css"
